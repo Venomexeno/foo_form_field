@@ -29,8 +29,8 @@ class FooTextFormField<Value> extends StatefulWidget {
 class _FooTextFormFieldState<Value> extends State<FooTextFormField<Value>> {
 
   final _formFieldKey = GlobalKey<FormFieldState<String>>();
-  late final _fieldState = _formFieldKey.currentState!;
-
+  FormFieldState<String> get _fieldState => _formFieldKey.currentState!;
+  
   TextFormFieldProperties<Value>? get _properties => widget.properties;
 
   FooTextEditingController<Value> get controller => widget.controller;
@@ -38,7 +38,6 @@ class _FooTextFormFieldState<Value> extends State<FooTextFormField<Value>> {
   @override
   void initState() {
     super.initState();
-    controller.init();
     WidgetsBinding.instance.addPostFrameCallback(
       (_)=>_afterFirstBuild(),
     );
@@ -162,8 +161,6 @@ class _FooTextFormFieldState<Value> extends State<FooTextFormField<Value>> {
     if (controller is RangeFieldController) {
       (controller as RangeFieldController).invokeSyncers();
     }
-    controller.init();
-   
     controller.addListener(
       _onControllerValueChanged,
     );
