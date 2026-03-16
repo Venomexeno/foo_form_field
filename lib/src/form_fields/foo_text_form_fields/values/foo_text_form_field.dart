@@ -108,7 +108,7 @@ class _FooTextFormFieldState<Value> extends State<FooTextFormField<Value>> {
       textAlignVertical: _properties?.textAlignVertical,
       autofocus: _properties?.autofocus ?? false,
       readOnly: _properties?.readOnly ?? false,
-      showCursor: _properties?.showCursor ?? false,
+      showCursor: _properties?.showCursor ?? true,
       obscuringCharacter: _properties?.obscuringCharacter ?? '•',
       obscureText: _properties?.obscureText ?? false,
       autocorrect: _properties?.autocorrect ?? true,
