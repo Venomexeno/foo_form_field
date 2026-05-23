@@ -82,6 +82,7 @@ class DateOnlyFormField extends StatelessWidget {
       initialDate: initialDate,
       firstDate: firstDate?.toDateTime() ?? DateTime(1900),
       lastDate: lastDate?.toDateTime() ?? DateTime(2100),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
     );
 
     if(selectedDate == null) {
