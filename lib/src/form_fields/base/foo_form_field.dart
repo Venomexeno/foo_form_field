@@ -17,13 +17,12 @@ class FooFormField<Value> extends StatefulWidget {
   final FooFormFieldProperties<Value>? properties;
 
   final FooFormFieldStateProvider<Value>? stateProvider;
-  
+
   @override
   State<FooFormField<Value>> createState() => _FooFormFieldState<Value>();
 }
 
 class _FooFormFieldState<Value> extends State<FooFormField<Value>> {
-  
   late FormFieldState<Value> _fieldState;
 
   FooFieldController<Value> get controller => widget.controller;
@@ -31,17 +30,11 @@ class _FooFormFieldState<Value> extends State<FooFormField<Value>> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_)=>_afterFirstBuild(),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _afterFirstBuild());
   }
 
   void _afterFirstBuild() {
-    widget.stateProvider?.call(
-      FooFormFieldState(
-        fieldState: _fieldState,
-      ),
-    );
+    widget.stateProvider?.call(FooFormFieldState(fieldState: _fieldState));
     _addListenerToCurrentController();
   }
 
@@ -53,7 +46,7 @@ class _FooFormFieldState<Value> extends State<FooFormField<Value>> {
       _addListenerToCurrentController();
     }
   }
-  
+
   @override
   void dispose() {
     controller.removeListener(_onControllerValueChanged);
@@ -72,10 +65,8 @@ class _FooFormFieldState<Value> extends State<FooFormField<Value>> {
       builder: (formFieldState) {
         _fieldState = formFieldState;
         return widget.builder(
-          context, 
-          FooFormFieldState(
-            fieldState: _fieldState,
-          ),
+          context,
+          FooFormFieldState(fieldState: _fieldState),
         );
       },
     );
@@ -85,23 +76,15 @@ class _FooFormFieldState<Value> extends State<FooFormField<Value>> {
     if (controller is RangeFieldController) {
       (controller as RangeFieldController).invokeSyncers();
     }
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_)=>_fieldState.didChange(
-        controller.value,
-      ),
-    );
-    controller.addListener(
-      _onControllerValueChanged,
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_fieldState.mounted) return;
+      return _fieldState.didChange(controller.value);
+    });
+    controller.addListener(_onControllerValueChanged);
   }
 
   void _onControllerValueChanged() {
-    _fieldState.didChange(
-      controller.value,
-    );
-    widget.properties?.onChanged?.call(
-      controller.value,
-    );
+    _fieldState.didChange(controller.value);
+    widget.properties?.onChanged?.call(controller.value);
   }
-  
 }
